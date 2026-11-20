@@ -1,0 +1,2151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="moderne">
+  <title>The Michelin Guide &amp; Its Stars — Culinary Learning Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and custom surface palette */
+      --background: #FAF5EB;             /* Warm Cream Parchment */
+      --surface-ochre: #E9CD92;          /* Warm Golden Ochre inner card */
+      --surface-sage: #C7DCD7;           /* Muted Sage-Teal inner card */
+      --surface-ivory: #FBF8F1;          /* Nested Off-White Ivory callout */
+      --surface-container-low: #FBF8F1;
+      --surface-container: #EFE6D5;      /* Subtle warm sand for hover/tracks */
+      --surface-container-high: #E5D9C3;
+
+      /* Rich dark ink */
+      --on-surface: #1E2420;
+      --on-surface-variant: #4A524D;
+
+      /* Hairline borders */
+      --outline: #2E3530;                /* Clean 1px hairline card border */
+      --outline-variant: #D3C9B4;        /* Soft divider hairline */
+
+      /* Vivid accent highlights */
+      --primary: #0F5C58;                /* Vivid deep culinary teal */
+      --on-primary: #FFFFFF;
+      --primary-container: #C7DCD7;
+      --on-primary-container: #113C39;
+      --secondary: #B8421B;              /* Vivid burnt terracotta */
+      --on-secondary: #FFFFFF;
+      --tertiary: #E9CD92;
+      --accent-gold: #A86F0A;            /* High-contrast amber-gold */
+
+      /* Semantic UI states */
+      --positive: #1B663E;
+      --positive-bg: #E2F1E8;
+      --warning: #8C5808;
+      --warning-bg: #F9EED7;
+      --error: #A32035;
+      --error-bg: #FAE6E9;
+      --on-error: #FFFFFF;
+      --focus: #D94E1F;                  /* Vivid orange focus highlight */
+
+      /* Data colors */
+      --data-1: #0F5C58;
+      --data-2: #B8421B;
+      --data-3: #A86F0A;
+      --data-4: #4A524D;
+      --data-context: #C9C0AC;
+
+      /* Typography */
+      --font-headline: 'Outfit', sans-serif;
+      --font-body: 'Lexend', sans-serif;
+      --font-label: 'Outfit', sans-serif;
+
+      --display-size: clamp(2.25rem, 1.4rem + 3.2vw, 3.65rem);
+      --headline-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.25rem);
+      --subhead-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      --label-size: 0.75rem;
+
+      /* Diagonal modular corners (two rounded, two sharp 90-degree) */
+      --card-radius: 1.5rem 0 1.5rem 0;
+      --card-radius-alt: 0 1.5rem 0 1.5rem;
+      --callout-radius: 1rem 0 1rem 0;
+      --pill-radius: 9999px;
+      --btn-radius: 0.75rem 0 0.75rem 0;
+
+      /* Hairline & flat style */
+      --hairline: 1px solid var(--outline);
+      --hairline-soft: 1px solid var(--outline-variant);
+      --elevation: none;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 3.75rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 140ms;
+      --dur-short: 240ms;
+      --dur-long: 520ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      position: static !important;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 65ch;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Main Layout */
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-2xl);
+      padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .page-grid * {
+      min-width: 0;
+    }
+
+    /* Tracked-out uppercase micro-label */
+    .micro-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--on-surface-variant);
+      display: inline-block;
+    }
+
+    .micro-label-accent {
+      color: var(--primary);
+    }
+
+    .micro-label-warm {
+      color: var(--secondary);
+    }
+
+    /* Attribution & Top Header */
+    .site-header {
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-xl);
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    .attribution-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+    }
+
+    .school-credit {
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--on-surface);
+    }
+
+    .audience-tag {
+      background-color: var(--surface-sage);
+      color: var(--on-primary-container);
+      border: var(--hairline);
+      border-radius: var(--pill-radius);
+      padding: var(--space-xs) var(--space-md);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    .hero-title {
+      font-size: var(--display-size);
+      font-weight: 700;
+      line-height: 1.08;
+      margin-top: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+
+    .hero-title .accent-word {
+      color: var(--secondary);
+    }
+
+    .hero-lead {
+      font-size: var(--subhead-size);
+      color: var(--on-surface-variant);
+      line-height: 1.5;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Quick Nav & Glossary */
+    .jump-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border: var(--hairline);
+      border-radius: var(--btn-radius);
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: var(--elevation);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--on-primary-container);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: var(--on-secondary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--on-surface);
+    }
+
+    .btn-ghost {
+      background-color: var(--surface-ivory);
+      color: var(--on-surface);
+    }
+
+    .btn-ghost:hover {
+      background-color: var(--surface-ochre);
+    }
+
+    .btn-ghost[aria-pressed="true"],
+    .btn-ghost.is-active {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Hero Stats + Word Helper */
+    .hero-side {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .stat-tile {
+      padding: var(--space-md);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+      background-color: var(--surface-ochre);
+    }
+
+    .stat-tile.sage {
+      background-color: var(--surface-sage);
+      border-radius: var(--card-radius-alt);
+    }
+
+    .stat-tile.ivory {
+      background-color: var(--surface-ivory);
+    }
+
+    .stat-num {
+      font-family: var(--font-headline);
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--on-surface);
+      margin-top: var(--space-xs);
+    }
+
+    .stat-desc {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+      line-height: 1.35;
+    }
+
+    /* Nested Off-White Ivory Callout Box */
+    .callout-ivory {
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    /* Glossary Chips */
+    .glossary-box {
+      display: grid;
+      gap: var(--space-sm);
+      background-color: var(--surface-sage);
+      border: var(--hairline);
+      border-radius: var(--card-radius);
+      padding: var(--space-lg);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .word-chip {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border: var(--hairline);
+      border-radius: var(--pill-radius);
+      background-color: var(--surface-ivory);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+
+    .word-chip:hover {
+      background-color: var(--surface-ochre);
+    }
+
+    .word-chip[aria-pressed="true"] {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+
+    /* Sections */
+    .learning-section {
+      display: grid;
+      gap: var(--space-lg);
+      padding-top: var(--space-xl);
+      border-top: var(--hairline-soft);
+    }
+
+    .learning-section:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .section-head {
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    .section-title {
+      font-size: var(--headline-size);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .section-intro {
+      color: var(--on-surface-variant);
+      max-width: 65ch;
+    }
+
+    /* Modular Diagonal-Corner Cards */
+    .card-ochre {
+      background-color: var(--surface-ochre);
+      border: var(--hairline);
+      border-radius: var(--card-radius);
+      padding: var(--space-lg);
+      box-shadow: var(--elevation);
+    }
+
+    .card-sage {
+      background-color: var(--surface-sage);
+      border: var(--hairline);
+      border-radius: var(--card-radius-alt);
+      padding: var(--space-lg);
+      box-shadow: var(--elevation);
+    }
+
+    .card-ivory {
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--card-radius);
+      padding: var(--space-lg);
+      box-shadow: var(--elevation);
+    }
+
+    /* Interactive Timeline Stepper (Section 1) */
+    .timeline-shell {
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    .timeline-controls {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .year-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .slider-wrap {
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    .range-slider {
+      width: 100%;
+      accent-color: var(--primary);
+      height: 28px;
+      cursor: pointer;
+    }
+
+    .timeline-stage {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .timeline-icon-box {
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* 3D FLIPCARDS — Bulletproof Grid-Stack Architecture (never clips back text) */
+    .flip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .flip-grid-5 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .flip-card {
+      perspective: 1100px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      user-select: none;
+    }
+
+    .flip-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      transform-style: preserve-3d;
+      transition: transform var(--dur-long) var(--ease-in-out);
+      width: 100%;
+      height: 100%;
+    }
+
+    .flip-card.is-flipped .flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-face {
+      grid-area: 1 / 1;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      min-height: 245px;
+      padding: var(--space-lg);
+      border: var(--hairline);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+      box-shadow: var(--elevation);
+    }
+
+    .flip-card.tone-ochre .flip-front {
+      background-color: var(--surface-ochre);
+      border-radius: var(--card-radius);
+    }
+
+    .flip-card.tone-sage .flip-front {
+      background-color: var(--surface-sage);
+      border-radius: var(--card-radius-alt);
+    }
+
+    .flip-back {
+      transform: rotateY(180deg);
+      background-color: var(--surface-ivory);
+    }
+
+    .flip-card.tone-ochre .flip-back {
+      border-radius: var(--card-radius);
+    }
+
+    .flip-card.tone-sage .flip-back {
+      border-radius: var(--card-radius-alt);
+    }
+
+    .flip-card.is-flipped .flip-front {
+      pointer-events: none;
+    }
+
+    .flip-card:not(.is-flipped) .flip-back {
+      pointer-events: none;
+    }
+
+    .flip-front-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .flip-icon-badge {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--pill-radius);
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .flip-question {
+      font-family: var(--font-headline);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--on-surface);
+    }
+
+    .flip-answer {
+      font-size: 0.96875rem;
+      line-height: 1.55;
+      color: var(--on-surface);
+    }
+
+    .flip-cue {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      align-self: flex-start;
+      padding: var(--space-xs) var(--space-md);
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--pill-radius);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+    }
+
+    .flip-back .flip-cue {
+      background-color: var(--surface-ochre);
+      color: var(--on-surface);
+    }
+
+    /* Section 2: Star Tiers Tabs & European Restaurants */
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .tab-panel-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: stretch;
+    }
+
+    .star-visual-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .restaurant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .restaurant-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .restaurant-reveal {
+      margin-top: var(--space-xs);
+    }
+
+    .restaurant-reveal[hidden] {
+      display: none;
+    }
+
+    /* Interactive European Comparison Table */
+    .table-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      text-align: left;
+      color: var(--on-surface-variant);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--hairline);
+    }
+
+    td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--hairline-soft);
+      color: var(--on-surface);
+    }
+
+    tbody tr:hover {
+      background-color: var(--surface-container);
+    }
+
+    .row-highlight {
+      background-color: var(--surface-sage);
+      font-weight: 600;
+    }
+
+    /* Section 3: Inspector Scenario Check */
+    .scenario-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .scenario-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) auto;
+      gap: var(--space-md);
+      align-items: center;
+      padding: var(--space-md) var(--space-lg);
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+    }
+
+    .scenario-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .feedback-banner {
+      grid-column: 1 / -1;
+      padding: var(--space-sm) var(--space-md);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+      font-size: 0.9375rem;
+    }
+
+    .feedback-banner.is-correct {
+      background-color: var(--positive-bg);
+      color: var(--positive);
+    }
+
+    .feedback-banner.is-wrong {
+      background-color: var(--error-bg);
+      color: var(--error);
+    }
+
+    /* Section 4: Kitchen Economics & Debate */
+    .split-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .bar-chart {
+      display: grid;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .bar-row {
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .bar-track {
+      height: 18px;
+      background-color: var(--surface-container);
+      border: var(--hairline);
+      border-radius: var(--pill-radius);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background-color: var(--primary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    .bar-fill.warm {
+      background-color: var(--secondary);
+    }
+
+    .bar-fill.gold {
+      background-color: var(--accent-gold);
+    }
+
+    /* Section 5: 5-Question Horizontal Quiz */
+    .quiz-container {
+      display: grid;
+      gap: var(--space-lg);
+      background-color: var(--surface-ochre);
+      border: var(--hairline);
+      border-radius: var(--card-radius);
+      padding: var(--space-xl);
+    }
+
+    .quiz-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--hairline);
+    }
+
+    .quiz-progress-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .q-pill {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 var(--space-sm);
+      border: var(--hairline);
+      border-radius: var(--pill-radius);
+      background-color: var(--surface-ivory);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .q-pill.is-current {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .q-pill.is-done-right {
+      background-color: var(--positive-bg);
+      color: var(--positive);
+    }
+
+    .q-pill.is-done-wrong {
+      background-color: var(--error-bg);
+      color: var(--error);
+    }
+
+    .score-badge {
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--pill-radius);
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    .quiz-card {
+      background-color: var(--surface-ivory);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    .quiz-question-text {
+      font-family: var(--font-headline);
+      font-size: 1.375rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    /* Horizontal 3-choice grid */
+    .quiz-choices-horizontal {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .choice-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      min-height: 92px;
+      padding: var(--space-md);
+      background-color: var(--background);
+      border: var(--hairline);
+      border-radius: var(--btn-radius);
+      text-align: left;
+      font-size: 0.96875rem;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--on-surface);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      background-color: var(--surface-sage);
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+    }
+
+    .choice-btn.is-correct {
+      background-color: var(--positive-bg);
+      color: var(--positive);
+      font-weight: 600;
+    }
+
+    .choice-btn.is-wrong {
+      background-color: var(--error-bg);
+      color: var(--error);
+    }
+
+    .quiz-footer-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .quiz-feedback-box {
+      flex: 1 1 280px;
+      padding: var(--space-sm) var(--space-md);
+      border: var(--hairline);
+      border-radius: var(--callout-radius);
+      background-color: var(--background);
+      font-size: 0.9375rem;
+    }
+
+    .quiz-feedback-box.is-correct {
+      background-color: var(--positive-bg);
+      color: var(--positive);
+    }
+
+    .quiz-feedback-box.is-wrong {
+      background-color: var(--error-bg);
+      color: var(--error);
+    }
+
+    /* Footer */
+    .page-footer {
+      border-top: var(--hairline);
+      padding-top: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+    }
+
+    @media (max-width: 820px) {
+      .hero-layout,
+      .tab-panel-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .quiz-choices-horizontal {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-xl);
+      }
+
+      .stat-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .timeline-stage,
+      .scenario-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .quiz-container {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+
+    <!-- HEADER & ATTRIBUTION -->
+    <header class="site-header">
+      <div class="attribution-bar">
+        <span class="school-credit">Nannestad High School- Barbara Anna Zielonka</span>
+        <span class="audience-tag">Culinary &amp; Food Processing Study Guide</span>
+      </div>
+
+      <div class="hero-layout">
+        <div>
+          <span class="micro-label micro-label-accent">Food Industry &amp; Gastronomy</span>
+          <h1 class="hero-title">How a Tire Book Created <span class="accent-word">Michelin Stars</span></h1>
+          <p class="hero-lead">
+            Learn how two French tire-making brothers built the world's most famous restaurant rating system—and what it takes for a kitchen team to earn a star today.
+          </p>
+          <nav class="jump-nav" aria-label="Page sections">
+            <a class="btn btn-primary" href="#origins">1. Origins (1900)</a>
+            <a class="btn btn-ghost" href="#stars-europe">2. Stars &amp; Europe</a>
+            <a class="btn btn-ghost" href="#five-criteria">3. 5 Criteria</a>
+            <a class="btn btn-ghost" href="#kitchen-reality">4. Kitchen Reality</a>
+            <a class="btn btn-secondary" href="#quiz-section">5. Quick Quiz</a>
+          </nav>
+        </div>
+
+        <div class="hero-side">
+          <div class="stat-row">
+            <div class="stat-tile">
+              <span class="micro-label">Year Started</span>
+              <div class="stat-num">1900</div>
+              <div class="stat-desc">Free booklet for drivers in France</div>
+            </div>
+            <div class="stat-tile sage">
+              <span class="micro-label">Top Rating</span>
+              <div class="stat-num">3 Stars</div>
+              <div class="stat-desc">Worth a special journey</div>
+            </div>
+            <div class="stat-tile ivory">
+              <span class="micro-label">Global List</span>
+              <div class="stat-num">19,653</div>
+              <div class="stat-desc">Restaurants in 2026 guide</div>
+            </div>
+          </div>
+
+          <div class="glossary-box">
+            <span class="micro-label">Kitchen Word Helper — Tap a word for a simple meaning</span>
+            <div class="chip-row" id="glossary-chips">
+              <button type="button" class="word-chip" aria-pressed="true" onclick="selectWord('anonymous', this)">Anonymous</button>
+              <button type="button" class="word-chip" aria-pressed="false" onclick="selectWord('criteria', this)">Criteria</button>
+              <button type="button" class="word-chip" aria-pressed="false" onclick="selectWord('consistency', this)">Consistency</button>
+              <button type="button" class="word-chip" aria-pressed="false" onclick="selectWord('gastronomy', this)">Gastronomy</button>
+            </div>
+            <div class="callout-ivory" id="glossary-output" aria-live="polite">
+              <strong>Anonymous:</strong> Secret. Nobody in the kitchen knows who the Michelin inspector is. They book tables using fake names and pay their own bills.
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECTION 1: HOW & WHY IT STARTED -->
+    <section id="origins" class="learning-section" aria-labelledby="origins-heading">
+      <div class="section-head">
+        <span class="micro-label micro-label-warm">Section 01 · History &amp; Purpose</span>
+        <h2 id="origins-heading" class="section-title">Why Did a Tire Company Start Rating Food?</h2>
+        <p class="section-intro">
+          In 1900, cars were rare. Brothers Édouard and André Michelin made rubber tires in France. They realized a simple business truth: if people drive farther, their tires wear out faster—so they buy more Michelin tires.
+        </p>
+      </div>
+
+      <!-- Interactive 1A: Timeline Stepper + Slider -->
+      <div class="card-sage timeline-shell">
+        <div class="timeline-controls">
+          <span class="micro-label">Interactive Timeline — Click a year or drag the slider</span>
+          <div class="year-buttons" id="timeline-buttons">
+            <button type="button" class="btn btn-ghost is-active" onclick="setTimelineStep(0)">1900 · Free Guide</button>
+            <button type="button" class="btn btn-ghost" onclick="setTimelineStep(1)">1920 · Workbench</button>
+            <button type="button" class="btn btn-ghost" onclick="setTimelineStep(2)">1926 · First Star</button>
+            <button type="button" class="btn btn-ghost" onclick="setTimelineStep(3)">1931 · Red &amp; 3 Stars</button>
+            <button type="button" class="btn btn-ghost" onclick="setTimelineStep(4)">1936 · Star Rules</button>
+          </div>
+          <div class="slider-wrap">
+            <label for="timeline-slider" class="micro-label">Slide through Michelin history (1900–1936)</label>
+            <input id="timeline-slider" type="range" class="range-slider" min="0" max="4" step="1" value="0" oninput="setTimelineStep(this.value)">
+          </div>
+        </div>
+
+        <div class="callout-ivory timeline-stage" aria-live="polite">
+          <div class="timeline-icon-box" id="timeline-svg-wrap" aria-hidden="true">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M12 3v6M12 15v6M3 12h6M15 12h6"></path>
+            </svg>
+          </div>
+          <div>
+            <span class="micro-label micro-label-accent" id="timeline-year-label">1900 · France</span>
+            <h3 id="timeline-step-title" style="margin-top: var(--space-xs); margin-bottom: var(--space-sm);">35,000 Free Booklets for Drivers</h3>
+            <p id="timeline-step-body">
+              France had fewer than 3,000 cars on the road. Édouard and André Michelin printed nearly 35,000 free guidebooks. The book showed maps, tire repair steps, petrol stations, mechanics, and hotels so drivers felt safe taking long trips.
+            </p>
+            <p id="timeline-step-why" style="font-weight: 600; color: var(--primary);">
+              Business goal: More road trips = worn-out tires = higher tire sales.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 1B: 3D Flipcards for Key Origin Questions -->
+      <div>
+        <span class="micro-label" style="margin-bottom: var(--space-md);">Interactive Cards — Tap any card to flip it over</span>
+        <div class="flip-grid">
+          <div class="flip-card tone-ochre" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Origin Question 1</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">Why did a tire company want people to eat out?</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <div class="flip-front-top">
+                  <span class="micro-label micro-label-accent">Answer</span>
+                </div>
+                <div class="flip-answer">
+                  Great restaurants gave motorists a reason to drive from town to town. More kilometers on the road meant drivers needed new Michelin tires sooner.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card tone-sage" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Origin Question 2</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">Why did Michelin stop giving the book away for free in 1920?</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <div class="flip-front-top">
+                  <span class="micro-label micro-label-accent">Answer</span>
+                </div>
+                <div class="flip-answer">
+                  André Michelin saw his free guidebook propping up a wobbly workbench in a garage. He said people only respect what they pay for—so Michelin charged money, removed ads, and hired secret inspectors.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card tone-ochre" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Origin Question 3</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">How did the guide switch from blue to its famous red cover?</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <div class="flip-front-top">
+                  <span class="micro-label micro-label-accent">Answer</span>
+                </div>
+                <div class="flip-answer">
+                  The guide had a blue cover until 1931. That year, Michelin introduced the 1-, 2-, and 3-star ranking system and changed the cover to red. Today it is mostly a digital app.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: STAR RATINGS & EUROPEAN EXAMPLES -->
+    <section id="stars-europe" class="learning-section" aria-labelledby="stars-heading">
+      <div class="section-head">
+        <span class="micro-label micro-label-warm">Section 02 · Ratings &amp; European Examples</span>
+        <h2 id="stars-heading" class="section-title">What Each Star Means &amp; Famous European Kitchens</h2>
+        <p class="section-intro">
+          Michelin does not give stars to every good restaurant. Only top restaurants receive 1, 2, or 3 stars. Others earn a <strong>Bib Gourmand</strong> for great food at fair prices.
+        </p>
+      </div>
+
+      <!-- Interactive 2A: Tab Group for Star Meanings -->
+      <div class="card-ochre">
+        <span class="micro-label" style="margin-bottom: var(--space-sm);">Interactive Rating Explorer — Choose a Michelin Award</span>
+        <div class="tab-bar" role="tablist" aria-label="Michelin rating tiers">
+          <button type="button" role="tab" class="btn btn-ghost is-active" aria-selected="true" onclick="selectTier('one', this)">1 Star</button>
+          <button type="button" role="tab" class="btn btn-ghost" aria-selected="false" onclick="selectTier('two', this)">2 Stars</button>
+          <button type="button" role="tab" class="btn btn-ghost" aria-selected="false" onclick="selectTier('three', this)">3 Stars</button>
+          <button type="button" role="tab" class="btn btn-ghost" aria-selected="false" onclick="selectTier('bib', this)">Bib Gourmand</button>
+        </div>
+
+        <div class="tab-panel-grid" style="margin-top: var(--space-lg);">
+          <div class="callout-ivory" aria-live="polite">
+            <div class="star-visual-row" id="tier-stars-svg" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <h3 id="tier-title" style="margin-bottom: var(--space-xs);">One Michelin Star</h3>
+            <p id="tier-official" style="font-weight: 600; color: var(--primary);">Official motto: "High-quality cooking, worth a stop."</p>
+            <p id="tier-desc">
+              The kitchen uses top ingredients and cooks dishes with clear flavors to a consistently high standard. If you are driving nearby, this restaurant is worth stopping for.
+            </p>
+          </div>
+          <div class="callout-ivory">
+            <span class="micro-label micro-label-accent">What This Means for Kitchen Staff</span>
+            <p id="tier-kitchen" style="margin-top: var(--space-sm);">
+              Every prep station must follow exact recipes and temperatures. Even a small mistake in seasoning or plating can stop a restaurant from keeping its first star.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 2B: European Restaurant Examples (Click-to-Reveal) -->
+      <div>
+        <span class="micro-label" style="margin-bottom: var(--space-md);">European Three-Star Examples — Click each restaurant to reveal kitchen notes</span>
+        <div class="restaurant-grid">
+          <article class="card-sage restaurant-card">
+            <div>
+              <span class="micro-label micro-label-accent">Paris, France</span>
+              <h3 style="margin-top: var(--space-xs);">L'Arpège</h3>
+              <p style="margin-top: var(--space-sm); font-size: 0.95rem;">
+                A world-famous Michelin-starred restaurant in Paris, France—the birthplace of the Michelin Guide.
+              </p>
+            </div>
+            <div>
+              <button type="button" class="btn btn-primary" aria-expanded="false" onclick="toggleRestaurant('rest-arpege', this)">Reveal Kitchen Fact</button>
+              <div id="rest-arpege" class="callout-ivory restaurant-reveal" hidden>
+                <strong>France Context:</strong> In the 2026 guide, France and Monaco lead Europe with <strong>31 three-star</strong> and 668 total starred restaurants. French culinary training shaped Michelin's focus on technique and sauces.
+              </div>
+            </div>
+          </article>
+
+          <article class="card-ochre restaurant-card">
+            <div>
+              <span class="micro-label micro-label-warm">Modena, Italy</span>
+              <h3 style="margin-top: var(--space-xs);">Osteria Francescana</h3>
+              <p style="margin-top: var(--space-sm); font-size: 0.95rem;">
+                An acclaimed Michelin-starred restaurant in Modena, a northern Italian city famous for aged balsamic vinegar and Parmigiano cheese.
+              </p>
+            </div>
+            <div>
+              <button type="button" class="btn btn-primary" aria-expanded="false" onclick="toggleRestaurant('rest-osteria', this)">Reveal Kitchen Fact</button>
+              <div id="rest-osteria" class="callout-ivory restaurant-reveal" hidden>
+                <strong>Italy Context:</strong> Italy's 2026 Michelin Guide includes <strong>15 three-star</strong> and 394 total starred restaurants. Traditional regional ingredients paired with modern chef personality shine here.
+              </div>
+            </div>
+          </article>
+
+          <article class="card-sage restaurant-card">
+            <div>
+              <span class="micro-label micro-label-accent">Girona, Spain</span>
+              <h3 style="margin-top: var(--space-xs);">El Celler de Can Roca</h3>
+              <p style="margin-top: var(--space-sm); font-size: 0.95rem;">
+                A celebrated Michelin-starred restaurant in Girona, Catalonia, Spain, known globally for creative culinary and pastry craft.
+              </p>
+            </div>
+            <div>
+              <button type="button" class="btn btn-primary" aria-expanded="false" onclick="toggleRestaurant('rest-roca', this)">Reveal Kitchen Fact</button>
+              <div id="rest-roca" class="callout-ivory restaurant-reveal" hidden>
+                <strong>Spain Context:</strong> Spain's 2026 Michelin Guide lists <strong>16 three-star</strong> and 307 total starred restaurants, showing how modern food science and teamwork elevate local traditions.
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Interactive 2C: Sortable European Guide Data Table -->
+      <div class="card-ivory">
+        <div class="table-controls">
+          <div>
+            <span class="micro-label micro-label-accent">2026 European Guide Numbers</span>
+            <h3>Compare Starred Restaurants Across Europe</h3>
+          </div>
+          <div class="chip-row" aria-label="Sort table">
+            <button type="button" class="word-chip" aria-pressed="true" onclick="sortEuroTable('three', this)">Sort by 3 Stars</button>
+            <button type="button" class="word-chip" aria-pressed="false" onclick="sortEuroTable('totalStarred', this)">Sort by Total Starred</button>
+            <button type="button" class="word-chip" aria-pressed="false" onclick="sortEuroTable('bib', this)">Sort by Bib Gourmand</button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Country / Region (2026)</th>
+                <th scope="col">3 Stars</th>
+                <th scope="col">2 Stars</th>
+                <th scope="col">1 Star</th>
+                <th scope="col">Total Starred</th>
+                <th scope="col">Bib Gourmand</th>
+              </tr>
+            </thead>
+            <tbody id="euro-table-body">
+              <tr>
+                <td>France &amp; Monaco</td>
+                <td>31</td>
+                <td>84</td>
+                <td>553</td>
+                <td>668</td>
+                <td>430</td>
+              </tr>
+              <tr>
+                <td>Spain</td>
+                <td>16</td>
+                <td>37</td>
+                <td>254</td>
+                <td>307</td>
+                <td>204</td>
+              </tr>
+              <tr>
+                <td>Italy</td>
+                <td>15</td>
+                <td>38</td>
+                <td>341</td>
+                <td>394</td>
+                <td>255</td>
+              </tr>
+              <tr>
+                <td>Germany</td>
+                <td>12</td>
+                <td>48</td>
+                <td>279</td>
+                <td>339</td>
+                <td>147</td>
+              </tr>
+              <tr>
+                <td>Great Britain &amp; Ireland</td>
+                <td>10</td>
+                <td>28</td>
+                <td>192</td>
+                <td>230</td>
+                <td>168</td>
+              </tr>
+              <tr class="row-highlight">
+                <td>Nordic Countries (incl. Norway)</td>
+                <td>6</td>
+                <td>15</td>
+                <td>78</td>
+                <td>99</td>
+                <td>48</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: HOW STARS ARE AWARDED (5 ANONYMOUS CRITERIA) -->
+    <section id="five-criteria" class="learning-section" aria-labelledby="criteria-heading">
+      <div class="section-head">
+        <span class="micro-label micro-label-warm">Section 03 · The Inspection Process</span>
+        <h2 id="criteria-heading" class="section-title">How Stars Are Awarded: The 5 Anonymous Criteria</h2>
+        <p class="section-intro">
+          Inspectors eat 250 to 300 meals each year using fake names. They judge <strong>only the food on the plate</strong>—not the restaurant's furniture, music, or fancy tablecloths.
+        </p>
+      </div>
+
+      <!-- Interactive 3A: 5 Flipcards for the 5 Official Criteria -->
+      <div>
+        <span class="micro-label" style="margin-bottom: var(--space-md);">The 5 Official Criteria — Click each card to flip and read how inspectors grade it</span>
+        <div class="flip-grid-5">
+          <div class="flip-card tone-ochre" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Criterion 01</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">1. Quality of Ingredients</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <span class="micro-label micro-label-accent">What Inspectors Check</span>
+                <div class="flip-answer">
+                  Are the vegetables, fish, meat, and spices fresh, seasonal, and high grade? Great cooking starts with careful raw-material handling and food processing.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card tone-sage" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Criterion 02</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">2. Mastery of Technique &amp; Flavor</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <span class="micro-label micro-label-accent">What Inspectors Check</span>
+                <div class="flip-answer">
+                  Is the food cooked to the exact right temperature? Are flavors balanced—not too salty, sour, or flat? Every cooking technique must make the dish taste better.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card tone-ochre" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Criterion 03</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">3. Chef's Personality in Food</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <span class="micro-label micro-label-accent">What Inspectors Check</span>
+                <div class="flip-answer">
+                  Does the menu show the chef's own ideas, background, and creative voice? Michelin looks for original dishes rather than copies of another kitchen.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card tone-sage" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Criterion 04</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1 1-1.5 3-1.5s3 .5 3 1.5-1 1.5-3 2-3 1-3 2 1 1.5 3 1.5 3-.5 3-1.5"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">4. Value for Money</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <span class="micro-label micro-label-accent">What Inspectors Check</span>
+                <div class="flip-answer">
+                  Does the meal feel fair for the price on the bill? Even a street-food stall in Singapore or a fine-dining menu in Paris must deliver quality that matches its cost.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card tone-ochre" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip(this)" onkeydown="handleFlipKey(event, this)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <div class="flip-front-top">
+                  <span class="micro-label">Criterion 05</span>
+                  <span class="flip-icon-badge" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                  </span>
+                </div>
+                <div class="flip-question">5. Consistency Over Time</div>
+                <span class="flip-cue">Click to Flip &rarr;</span>
+              </div>
+              <div class="flip-face flip-back">
+                <span class="micro-label micro-label-accent">What Inspectors Check</span>
+                <div class="flip-answer">
+                  Different inspectors visit at different times of the year. The kitchen must deliver the exact same high standard on a quiet Tuesday lunch as on a busy Saturday night.
+                </div>
+                <span class="flip-cue">&larr; Click to Flip Back</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 3B: Think Like an Inspector Simulator -->
+      <div class="card-sage">
+        <span class="micro-label micro-label-accent">Practice Activity · Think Like a Michelin Inspector</span>
+        <h3 style="margin-top: var(--space-xs); margin-bottom: var(--space-md);">Would This Kitchen Pass the Inspection?</h3>
+        <div class="scenario-list">
+          <div class="scenario-row" id="scen-1">
+            <div>
+              <strong>Case 1:</strong> A restaurant has gold chandeliers and expensive chairs, but the soup arrives lukewarm and under-seasoned.
+            </div>
+            <div class="scenario-actions">
+              <button type="button" class="btn btn-ghost" onclick="checkScenario(1, false)">Likely Fails</button>
+              <button type="button" class="btn btn-ghost" onclick="checkScenario(1, true)">Likely Passes</button>
+            </div>
+          </div>
+
+          <div class="scenario-row" id="scen-2">
+            <div>
+              <strong>Case 2:</strong> A kitchen served an amazing fish dish in May, but when an inspector returned in October, the fish was overcooked.
+            </div>
+            <div class="scenario-actions">
+              <button type="button" class="btn btn-ghost" onclick="checkScenario(2, false)">Likely Fails</button>
+              <button type="button" class="btn btn-ghost" onclick="checkScenario(2, true)">Likely Passes</button>
+            </div>
+          </div>
+
+          <div class="scenario-row" id="scen-3">
+            <div>
+              <strong>Case 3:</strong> A simple neighborhood bistro uses fresh local vegetables, balanced sauces, and tastes great on three different visits.
+            </div>
+            <div class="scenario-actions">
+              <button type="button" class="btn btn-ghost" onclick="checkScenario(3, false)">Likely Fails</button>
+              <button type="button" class="btn btn-ghost" onclick="checkScenario(3, true)">Likely Passes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: KITCHEN REALITY & MODERN DEBATE -->
+    <section id="kitchen-reality" class="learning-section" aria-labelledby="reality-heading">
+      <div class="section-head">
+        <span class="micro-label micro-label-warm">Section 04 · Behind the Scenes</span>
+        <h2 id="reality-heading" class="section-title">Money, Pressure, and the 2026 Inspector Debate</h2>
+        <p class="section-intro">
+          Winning a Michelin star fills seats fast, but running a starred kitchen is expensive and demanding. Today, chefs also debate whether Michelin has enough inspectors.
+        </p>
+      </div>
+
+      <div class="split-2">
+        <!-- Interactive 4A: Kitchen Budget Breakdown Toggle -->
+        <div class="card-ochre">
+          <span class="micro-label">Interactive Cost View — Toggle to compare</span>
+          <h3 style="margin-top: var(--space-xs); margin-bottom: var(--space-sm);">Where Every $100 in Revenue Goes</h3>
+          <div class="chip-row" style="margin-bottom: var(--space-md);">
+            <button type="button" class="word-chip" aria-pressed="true" onclick="setCostView('fine', this)">Starred Restaurant Margins</button>
+            <button type="button" class="word-chip" aria-pressed="false" onclick="setCostView('impact', this)">After Winning a Star</button>
+          </div>
+
+          <div id="cost-view-fine" class="callout-ivory">
+            <p style="font-size: 0.9375rem;">Fine-dining kitchens spend heavily on fresh ingredients and skilled staff, leaving thin profits (around 5–10%):</p>
+            <div class="bar-chart">
+              <div class="bar-row">
+                <div class="bar-meta"><span>Staff &amp; Kitchen Labor</span><span>32%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width: 32%;"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-meta"><span>Food Ingredients</span><span>30%</span></div>
+                <div class="bar-track"><div class="bar-fill warm" style="width: 30%;"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-meta"><span>Operating Expenses</span><span>18%</span></div>
+                <div class="bar-track"><div class="bar-fill gold" style="width: 18%;"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-meta"><span>Rent &amp; Building</span><span>10%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width: 10%;"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-meta"><span>Owner Profit</span><span>5–10%</span></div>
+                <div class="bar-track"><div class="bar-fill warm" style="width: 8%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="cost-view-impact" class="callout-ivory" hidden>
+            <ul style="margin: 0; padding-left: var(--space-lg); display: grid; gap: var(--space-sm); font-size: 0.95rem;">
+              <li><strong>Bookings surge overnight:</strong> When Tanière³ in Quebec earned a star, its reservation website crashed and booked four months of seats in one week.</li>
+              <li><strong>No cutting staff on slow nights:</strong> Because secret inspectors can dine on any evening, kitchens must keep full prep and service teams ready every day.</li>
+              <li><strong>Prestige over easy cash:</strong> Many famous chefs use Michelin stars to build trust first, then earn bigger income from cookbooks, TV shows, or food brands.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Interactive 4B: 2026 Credibility Debate Switcher -->
+        <div class="card-sage">
+          <span class="micro-label micro-label-accent">Industry Debate (2026) — Switch viewpoints</span>
+          <h3 style="margin-top: var(--space-xs); margin-bottom: var(--space-sm);">Are There Enough Inspectors Today?</h3>
+          <div class="chip-row" style="margin-bottom: var(--space-md);">
+            <button type="button" class="word-chip" aria-pressed="true" onclick="setDebateView('chefs', this)">Chefs &amp; Critics Say</button>
+            <button type="button" class="word-chip" aria-pressed="false" onclick="setDebateView('michelin', this)">Michelin Responds</button>
+          </div>
+
+          <div id="debate-chefs" class="callout-ivory">
+            <span class="micro-label micro-label-warm">The Concern</span>
+            <p style="margin-top: var(--space-xs);">
+              By August 2026, the Michelin Guide listed <strong>19,653 restaurants</strong> across five continents. Some chefs and an ex-inspector told <em>The Guardian</em> that the team is stretched thin and may go years without re-visiting every listed restaurant.
+            </p>
+            <p style="font-size: 0.9375rem; color: var(--on-surface-variant);">
+              Critics also ask if taking tourism-board money (for example, over $1 million from states or cities to launch local guides) puts independence at risk.
+            </p>
+          </div>
+
+          <div id="debate-michelin" class="callout-ivory" hidden>
+            <span class="micro-label micro-label-accent">Michelin's Position</span>
+            <p style="margin-top: var(--space-xs);">
+              Michelin keeps its exact staff count secret to protect anonymity. However, the company says its inspectors come from <strong>more than 30 nationalities</strong> and eat <strong>250 to 300 meals each per year</strong>.
+            </p>
+            <p style="font-size: 0.9375rem; color: var(--on-surface-variant);">
+              Michelin also states that its anonymous inspectors work separately from commercial teams and never accept free meals from restaurants.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: 5 HORIZONTAL MULTIPLE-CHOICE QUESTIONS -->
+    <section id="quiz-section" class="learning-section" aria-labelledby="quiz-heading">
+      <div class="section-head">
+        <span class="micro-label micro-label-warm">Section 05 · Check Your Knowledge</span>
+        <h2 id="quiz-heading" class="section-title">5-Question Michelin Stars Review Quiz</h2>
+        <p class="section-intro">
+          Pick one answer for each question. You will see instant feedback and your live score below.
+        </p>
+      </div>
+
+      <div class="quiz-container">
+        <div class="quiz-topbar">
+          <div class="quiz-progress-pills" id="quiz-pills" role="navigation" aria-label="Quiz questions">
+            <button type="button" class="q-pill is-current" onclick="goToQuestion(0)">Q1</button>
+            <button type="button" class="q-pill" onclick="goToQuestion(1)">Q2</button>
+            <button type="button" class="q-pill" onclick="goToQuestion(2)">Q3</button>
+            <button type="button" class="q-pill" onclick="goToQuestion(3)">Q4</button>
+            <button type="button" class="q-pill" onclick="goToQuestion(4)">Q5</button>
+          </div>
+          <div class="score-badge" id="live-score" aria-live="polite">Score: 0 / 5</div>
+        </div>
+
+        <div class="quiz-card">
+          <div>
+            <span class="micro-label micro-label-accent" id="quiz-q-counter">Question 1 of 5</span>
+            <h3 class="quiz-question-text" id="quiz-q-text" style="margin-top: var(--space-xs);">
+              Why did Édouard and André Michelin first publish the Michelin Guide in 1900?
+            </h3>
+          </div>
+
+          <div class="quiz-choices-horizontal" id="quiz-choices" role="group" aria-label="Answer choices">
+            <!-- Populated by JavaScript -->
+          </div>
+
+          <div class="quiz-footer-bar">
+            <div class="quiz-feedback-box" id="quiz-feedback" aria-live="polite">
+              Select one of the three choices above to check your answer.
+            </div>
+            <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+              <button type="button" class="btn btn-ghost" id="quiz-reset-btn" onclick="resetQuiz()">Restart Quiz</button>
+              <button type="button" class="btn btn-primary" id="quiz-next-btn" onclick="nextQuestion()">Next Question &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <div>
+        <strong>Nannestad High School- Barbara Anna Zielonka</strong> · Vocational Culinary &amp; Food Processing Study Resource
+      </div>
+      <div>
+        Sources: The Michelin Guide (History &amp; Inspection Process), Wikipedia (Michelin Guide 2026 Data), The Guardian (Aug 2026), The Margin, Social Life Magazine, Canadian Affairs.
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Glossary data (backticks for safe string escaping)
+    const glossaryData = {
+      anonymous: `<strong>Anonymous:</strong> Secret. Nobody in the kitchen knows who the Michelin inspector is. They book tables using fake names and pay their own bills.`,
+      criteria: `<strong>Criteria:</strong> The rules or standards used to judge something. Michelin uses five food criteria to decide if a restaurant deserves a star.`,
+      consistency: `<strong>Consistency:</strong> Cooking to the same high standard every day. A dish served on Tuesday lunch must be just as good as Saturday dinner.`,
+      gastronomy: `<strong>Gastronomy:</strong> The art and science of choosing, preparing, and serving good food.`
+    };
+
+    function selectWord(key, btn) {
+      const chips = document.querySelectorAll('#glossary-chips .word-chip');
+      chips.forEach(function(chip) {
+        chip.setAttribute('aria-pressed', 'false');
+      });
+      if (btn) btn.setAttribute('aria-pressed', 'true');
+      const output = document.getElementById('glossary-output');
+      if (output && glossaryData[key]) {
+        output.innerHTML = glossaryData[key];
+      }
+    }
+
+    // Section 1A: Timeline Stepper
+    const timelineSteps = [
+      {
+        label: `1900 · France`,
+        title: `35,000 Free Booklets for Drivers`,
+        body: `France had fewer than 3,000 cars on the road. Édouard and André Michelin printed nearly 35,000 free guidebooks. The book showed maps, tire repair steps, petrol stations, mechanics, and hotels so drivers felt safe taking long trips.`,
+        why: `Business goal: More road trips = worn-out tires = higher tire sales.`,
+        icon: `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 3v6M12 15v6M3 12h6M15 12h6"></path></svg>`
+      },
+      {
+        label: `1920–1922 · A Turning Point`,
+        title: `Propping Up a Workbench`,
+        body: `André Michelin visited a tire shop and saw stacks of his free guidebooks being used to prop up a workbench. He decided people only respect what they pay for—so Michelin removed ads, charged a fee, and hired anonymous restaurant inspectors.`,
+        why: `Turning point: The guide became an independent, serious dining reference.`,
+        icon: `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`
+      },
+      {
+        label: `1926 · First Distinction`,
+        title: `The Very First Michelin Star`,
+        body: `As the restaurant section grew more popular than the car-repair pages, Michelin began awarding a single star to outstanding kitchens in France.`,
+        why: `Milestone: Chefs now had a prestigious culinary honor to aim for.`,
+        icon: `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`
+      },
+      {
+        label: `1931 · A New Look`,
+        title: `Three Star Levels & the Red Cover`,
+        body: `Michelin replaced the single-star system with zero, one, two, and three stars to show different levels of cooking excellence. That same year, the book's cover changed from blue to bright red.`,
+        why: `Design shift: The "Red Guide" became a global symbol of fine dining.`,
+        icon: `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>`
+      },
+      {
+        label: `1936 · Clear Definitions`,
+        title: `Official Meanings Published`,
+        body: `Michelin published the official definitions for 1, 2, and 3 stars—linking restaurant quality directly to how far a driver should travel to eat there.`,
+        why: `Legacy: Those exact three travel-based definitions are still used today.`,
+        icon: `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>`
+      }
+    ];
+
+    function setTimelineStep(index) {
+      const idx = Number(index);
+      const step = timelineSteps[idx];
+      if (!step) return;
+
+      const slider = document.getElementById('timeline-slider');
+      if (slider) slider.value = String(idx);
+
+      const btns = document.querySelectorAll('#timeline-buttons button');
+      btns.forEach(function(btn, i) {
+        if (i === idx) {
+          btn.classList.add('is-active');
+        } else {
+          btn.classList.remove('is-active');
+        }
+      });
+
+      const labelEl = document.getElementById('timeline-year-label');
+      const titleEl = document.getElementById('timeline-step-title');
+      const bodyEl = document.getElementById('timeline-step-body');
+      const whyEl = document.getElementById('timeline-step-why');
+      const svgWrap = document.getElementById('timeline-svg-wrap');
+
+      if (labelEl) labelEl.textContent = step.label;
+      if (titleEl) titleEl.textContent = step.title;
+      if (bodyEl) bodyEl.textContent = step.body;
+      if (whyEl) whyEl.textContent = step.why;
+      if (svgWrap) svgWrap.innerHTML = step.icon;
+    }
+
+    // 3D Flipcard handler (click + keyboard Enter/Space)
+    function toggleFlip(card) {
+      if (!card) return;
+      const flipped = card.classList.toggle('is-flipped');
+      card.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+    }
+
+    function handleFlipKey(event, card) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleFlip(card);
+      }
+    }
+
+    // Section 2A: Star Tiers Tab Explorer
+    const tierData = {
+      one: {
+        stars: 1,
+        title: `One Michelin Star`,
+        official: `Official motto: "High-quality cooking, worth a stop."`,
+        desc: `The kitchen uses top ingredients and cooks dishes with clear flavors to a consistently high standard. If you are driving nearby, this restaurant is worth stopping for.`,
+        kitchen: `Every prep station must follow exact recipes and temperatures. Even a small mistake in seasoning or plating can stop a restaurant from keeping its first star.`
+      },
+      two: {
+        stars: 2,
+        title: `Two Michelin Stars`,
+        official: `Official motto: "Excellent cooking, worth a detour."`,
+        desc: `The chef's personality and skill shine through refined, expertly crafted dishes. Drivers are willing to leave their main highway route just to eat here.`,
+        kitchen: `Two-star kitchens balance deep technical mastery with creative flavor combinations—every sauce, garnish, and texture must work together smoothly.`
+      },
+      three: {
+        stars: 3,
+        title: `Three Michelin Stars`,
+        official: `Official motto: "Exceptional cuisine, worth a special journey."`,
+        desc: `Michelin's highest award. Cooking is treated like an art form by chefs at the peak of their profession, creating dishes that become culinary classics.`,
+        kitchen: `Only around 150 restaurants worldwide hold 3 stars. Behind the scenes, large teams handle sourcing, fermentation, butchery, pastry, and plating with zero margin for error.`
+      },
+      bib: {
+        stars: 0,
+        title: `Bib Gourmand (Since 1997)`,
+        official: `Named after Bibendum, the Michelin Man: "Exceptionally good food at moderate prices."`,
+        desc: `Not every great meal needs luxury prices. Bib Gourmand recognizes restaurants serving high-quality cooking below a local price limit (for example, around €40–€45 in France).`,
+        kitchen: `Focuses on smart food processing, seasonal local ingredients, and strong kitchen cost control so diners enjoy great quality at an everyday price.`
+      }
+    };
+
+    function selectTier(key, btn) {
+      const data = tierData[key];
+      if (!data) return;
+
+      const tabs = document.querySelectorAll('[role="tab"]');
+      tabs.forEach(function(tab) {
+        tab.classList.remove('is-active');
+        tab.setAttribute('aria-selected', 'false');
+      });
+      if (btn) {
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+      }
+
+      const starWrap = document.getElementById('tier-stars-svg');
+      if (starWrap) {
+        if (data.stars === 0) {
+          starWrap.innerHTML = `<span class="micro-label micro-label-warm">Good Value Distinction · Bibendum Emblem</span>`;
+        } else {
+          let html = ``;
+          for (let i = 0; i < data.stars; i++) {
+            html += `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+          }
+          starWrap.innerHTML = html;
+        }
+      }
+
+      const titleEl = document.getElementById('tier-title');
+      const officialEl = document.getElementById('tier-official');
+      const descEl = document.getElementById('tier-desc');
+      const kitchenEl = document.getElementById('tier-kitchen');
+
+      if (titleEl) titleEl.textContent = data.title;
+      if (officialEl) officialEl.textContent = data.official;
+      if (descEl) descEl.textContent = data.desc;
+      if (kitchenEl) kitchenEl.textContent = data.kitchen;
+    }
+
+    // Section 2B: European Restaurant Reveal Cards
+    function toggleRestaurant(panelId, btn) {
+      const panel = document.getElementById(panelId);
+      if (!panel || !btn) return;
+      const isHidden = panel.hasAttribute('hidden');
+      if (isHidden) {
+        panel.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = `Hide Kitchen Fact`;
+      } else {
+        panel.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = `Reveal Kitchen Fact`;
+      }
+    }
+
+    // Section 2C: Sortable European Guide Table
+    const euroRows = [
+      { country: `France & Monaco`, three: 31, two: 84, one: 553, totalStarred: 668, bib: 430, highlight: false },
+      { country: `Spain`, three: 16, two: 37, one: 254, totalStarred: 307, bib: 204, highlight: false },
+      { country: `Italy`, three: 15, two: 38, one: 341, totalStarred: 394, bib: 255, highlight: false },
+      { country: `Germany`, three: 12, two: 48, one: 279, totalStarred: 339, bib: 147, highlight: false },
+      { country: `Great Britain & Ireland`, three: 10, two: 28, one: 192, totalStarred: 230, bib: 168, highlight: false },
+      { country: `Nordic Countries (incl. Norway)`, three: 6, two: 15, one: 78, totalStarred: 99, bib: 48, highlight: true }
+    ];
+
+    function sortEuroTable(field, btn) {
+      const chips = document.querySelectorAll('.table-controls .word-chip');
+      chips.forEach(function(c) { c.setAttribute('aria-pressed', 'false'); });
+      if (btn) btn.setAttribute('aria-pressed', 'true');
+
+      const sorted = euroRows.slice().sort(function(a, b) {
+        return b[field] - a[field];
+      });
+
+      const tbody = document.getElementById('euro-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = sorted.map(function(row) {
+        const cls = row.highlight ? ` class="row-highlight"` : ``;
+        return `<tr${cls}><td>${row.country}</td><td>${row.three}</td><td>${row.two}</td><td>${row.one}</td><td>${row.totalStarred}</td><td>${row.bib}</td></tr>`;
+      }).join('');
+    }
+
+    // Section 3B: Think Like an Inspector
+    const scenarioFeedback = {
+      1: {
+        pass: false,
+        msgRight: `Correct! Michelin judges only the food on the plate. Expensive chairs cannot save lukewarm, under-seasoned soup.`,
+        msgWrong: `Not quite. Luxury chairs and chandeliers do not earn stars—inspectors focus on food temperature, seasoning, and technique.`
+      },
+      2: {
+        pass: false,
+        msgRight: `Correct! Consistency between visits is one of the 5 criteria. Overcooked fish on a second visit will hold a kitchen back.`,
+        msgWrong: `Not quite. One great visit is not enough. Michelin inspectors return multiple times to test consistency.`
+      },
+      3: {
+        pass: true,
+        msgRight: `Correct! Fresh ingredients, strong technique, fair value, and steady quality across visits meet Michelin's core standards—even in a simple dining room.`,
+        msgWrong: `Actually, this bistro could pass! Simple rooms can win stars if ingredients, flavor, value, and consistency are strong.`
+      }
+    };
+
+    function checkScenario(id, guessedPass) {
+      const row = document.getElementById(`scen-${id}`);
+      const info = scenarioFeedback[id];
+      if (!row || !info) return;
+
+      const existing = row.querySelector('.feedback-banner');
+      if (existing) existing.remove();
+
+      const banner = document.createElement('div');
+      const isCorrect = guessedPass === info.pass;
+      banner.className = `feedback-banner ${isCorrect ? 'is-correct' : 'is-wrong'}`;
+      banner.textContent = isCorrect ? info.msgRight : info.msgWrong;
+      row.appendChild(banner);
+    }
+
+    // Section 4A & 4B: Cost & Debate Toggles
+    function setCostView(mode, btn) {
+      const fine = document.getElementById('cost-view-fine');
+      const impact = document.getElementById('cost-view-impact');
+      if (!fine || !impact) return;
+
+      const buttons = btn ? btn.parentElement.querySelectorAll('.word-chip') : [];
+      buttons.forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
+      if (btn) btn.setAttribute('aria-pressed', 'true');
+
+      if (mode === 'fine') {
+        fine.removeAttribute('hidden');
+        impact.setAttribute('hidden', '');
+      } else {
+        impact.removeAttribute('hidden');
+        fine.setAttribute('hidden', '');
+      }
+    }
+
+    function setDebateView(side, btn) {
+      const chefs = document.getElementById('debate-chefs');
+      const michelin = document.getElementById('debate-michelin');
+      if (!chefs || !michelin) return;
+
+      const buttons = btn ? btn.parentElement.querySelectorAll('.word-chip') : [];
+      buttons.forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
+      if (btn) btn.setAttribute('aria-pressed', 'true');
+
+      if (side === 'chefs') {
+        chefs.removeAttribute('hidden');
+        michelin.setAttribute('hidden', '');
+      } else {
+        michelin.removeAttribute('hidden');
+        chefs.setAttribute('hidden', '');
+      }
+    }
+
+    // Section 5: 5-Question Horizontal Quiz
+    const quizQuestions = [
+      {
+        q: `Why did Édouard and André Michelin first publish the Michelin Guide in 1900?`,
+        choices: [
+          `To sell more car tires by encouraging drivers to travel`,
+          `To rank the three most expensive luxury chefs in Paris`,
+          `To teach home cooks how to make traditional French sauces`
+        ],
+        correct: 0,
+        explainRight: `Correct! More road trips wore down rubber tires faster, which boosted Michelin tire sales.`,
+        explainWrong: `Not quite. In 1900 it was a free travel guide for motorists designed to encourage driving and increase tire sales.`
+      },
+      {
+        q: `What happened in 1920 that made Michelin start charging money for the guide?`,
+        choices: [
+          `The French government passed a new tax on free food books`,
+          `André Michelin saw free copies used to prop up a workbench`,
+          `Restaurants asked to pay for bigger advertisements in the book`
+        ],
+        correct: 1,
+        explainRight: `Correct! André Michelin realized people only respect what they pay for, so he removed ads and hired inspectors.`,
+        explainWrong: `Try again next time! André Michelin found his free guide propping up a garage workbench in 1920.`
+      },
+      {
+        q: `What does a Three-Star Michelin rating mean?`,
+        choices: [
+          `Good everyday food sold below a local budget price limit`,
+          `Very good cooking, worth a short stop if you pass nearby`,
+          `Exceptional cuisine, worth a special journey just to eat there`
+        ],
+        correct: 2,
+        explainRight: `Correct! Three stars means exceptional cuisine, worth a special journey. (Affordable great food is Bib Gourmand.)`,
+        explainWrong: `Not quite. Three stars is Michelin's highest honor: exceptional cuisine, worth a special journey.`
+      },
+      {
+        q: `Which of these is one of the 5 criteria Michelin inspectors use to judge food?`,
+        choices: [
+          `Consistency of the dishes across different visits`,
+          `How expensive the restaurant's chairs and tablecloths look`,
+          `How many followers the head chef has on social media`
+        ],
+        correct: 0,
+        explainRight: `Correct! Inspectors visit at different times to check consistency, along with ingredients, technique, chef personality, and value.`,
+        explainWrong: `Not quite. Michelin judges only the food on the plate—never furniture or social media popularity.`
+      },
+      {
+        q: `Which European restaurant is correctly matched with its city and country?`,
+        choices: [
+          `L'Arpège — Girona, Spain`,
+          `Osteria Francescana — Modena, Italy`,
+          `El Celler de Can Roca — Paris, France`
+        ],
+        correct: 1,
+        explainRight: `Correct! Osteria Francescana is in Modena, Italy (L'Arpège is in Paris, France; El Celler de Can Roca is in Girona, Spain).`,
+        explainWrong: `Not quite. Osteria Francescana is in Modena, Italy; L'Arpège is in Paris, and El Celler de Can Roca is in Girona.`
+      }
+    ];
+
+    let currentQ = 0;
+    const userAnswers = [null, null, null, null, null];
+
+    function renderQuiz() {
+      const item = quizQuestions[currentQ];
+      const counterEl = document.getElementById('quiz-q-counter');
+      const textEl = document.getElementById('quiz-q-text');
+      const choicesEl = document.getElementById('quiz-choices');
+      const feedbackEl = document.getElementById('quiz-feedback');
+      const nextBtn = document.getElementById('quiz-next-btn');
+      const scoreEl = document.getElementById('live-score');
+
+      if (!item || !counterEl || !textEl || !choicesEl || !feedbackEl || !nextBtn || !scoreEl) return;
+
+      // Update live score
+      let score = 0;
+      let answeredCount = 0;
+      for (let i = 0; i < quizQuestions.length; i++) {
+        if (userAnswers[i] !== null) {
+          answeredCount++;
+          if (userAnswers[i] === quizQuestions[i].correct) {
+            score++;
+          }
+        }
+      }
+      scoreEl.textContent = `Score: ${score} / 5`;
+
+      // Update pills
+      const pills = document.querySelectorAll('#quiz-pills .q-pill');
+      pills.forEach(function(pill, i) {
+        pill.className = `q-pill`;
+        if (i === currentQ) {
+          pill.classList.add('is-current');
+        } else if (userAnswers[i] !== null) {
+          pill.classList.add(userAnswers[i] === quizQuestions[i].correct ? 'is-done-right' : 'is-done-wrong');
+        }
+      });
+
+      counterEl.textContent = `Question ${currentQ + 1} of ${quizQuestions.length}`;
+      textEl.textContent = item.q;
+
+      const selected = userAnswers[currentQ];
+      const labels = [`A`, `B`, `C`];
+      choicesEl.innerHTML = ``;
+
+      item.choices.forEach(function(choiceText, idx) {
+        const btn = document.createElement('button');
+        btn.type = `button`;
+        btn.className = `choice-btn`;
+        if (selected !== null) {
+          btn.disabled = true;
+          if (idx === item.correct) {
+            btn.classList.add('is-correct');
+          } else if (idx === selected) {
+            btn.classList.add('is-wrong');
+          }
+        }
+        btn.innerHTML = `<span class="micro-label">Choice ${labels[idx]}</span><span>${choiceText}</span>`;
+        btn.onclick = function() { selectQuizChoice(idx); };
+        choicesEl.appendChild(btn);
+      });
+
+      if (selected === null) {
+        feedbackEl.className = `quiz-feedback-box`;
+        feedbackEl.textContent = `Select one of the three choices above to check your answer.`;
+      } else if (selected === item.correct) {
+        feedbackEl.className = `quiz-feedback-box is-correct`;
+        feedbackEl.textContent = item.explainRight;
+      } else {
+        feedbackEl.className = `quiz-feedback-box is-wrong`;
+        feedbackEl.textContent = item.explainWrong;
+      }
+
+      if (currentQ === quizQuestions.length - 1) {
+        nextBtn.textContent = answeredCount === quizQuestions.length ? `All Done (${score}/5) · Q1` : `Back to Question 1`;
+      } else {
+        nextBtn.textContent = `Next Question →`;
+      }
+    }
+
+    function selectQuizChoice(choiceIndex) {
+      if (userAnswers[currentQ] !== null) return;
+      userAnswers[currentQ] = choiceIndex;
+      renderQuiz();
+    }
+
+    function nextQuestion() {
+      currentQ = (currentQ + 1) % quizQuestions.length;
+      renderQuiz();
+    }
+
+    function goToQuestion(idx) {
+      if (idx >= 0 && idx < quizQuestions.length) {
+        currentQ = idx;
+        renderQuiz();
+      }
+    }
+
+    function resetQuiz() {
+      for (let i = 0; i < userAnswers.length; i++) {
+        userAnswers[i] = null;
+      }
+      currentQ = 0;
+      renderQuiz();
+    }
+
+    // Initialize quiz on load
+    renderQuiz();
+  </script>
+</body>
+</html>
